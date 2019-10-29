@@ -151,16 +151,49 @@ napl_sample <- lobster_tidy %>%
 
 
 mohk_sample <- lobster_tidy %>% 
-  filter(site =="MONK") %>% 
+  filter(site =="MOHK") %>% 
   pull(size_mm)
 
 
+mn_ttest <- t.test(mohk_sample, napl_sample)
 
 
-
+mn_ttest
 ```
 
+There is a significant difference in lobster lengths between Naples and Mohawk Reef. (t(df)) = statistic, p < 0.001, alpha = 0.05).
 
+
+```{r}
+lobster_mn <- lobster_tidy %>% 
+  filter(site %in% c("NAPL", "MOHK"))
+
+
+# ~ means to look in site column, theres two groups, want to do a comparison between two
+mn_ttest2 <- t.test(size_mm ~ site, data = lobster_mn)
+
+mn_ttest2
+
+mn_ttest2$p.value 
+mn_ttest2$statistic
+```
+
+Here is the p-value: `r_mn_ttest$p.value`
+
+Here is the t-statistic: `r mn_ttest2$statistic`
+
+
+#### Now a HEAT MAP = two discrete values, colors = variable value
+
+```{r}
+
+lobster_ys <- lobster_parse_date %>% 
+  count(obs_year, site)
+
+
+ggplot(data = lobster_ys, aes(x = obs_year, y = site)) +
+  geom_tile(aes(fill = n))
+```
 
 
 
